@@ -1,0 +1,7 @@
+requests
+numpy
+pandas
+scipy
+arch>=8.0
+statsmodels>=0.14
+pyarrow

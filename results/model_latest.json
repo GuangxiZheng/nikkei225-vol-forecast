@@ -1,0 +1,55 @@
+{
+  "model": "v2: path(HAR+VI + GARCH ensemble) + conformal 80% PI + consensus",
+  "data_asof": "2026-10-14",
+  "features": {
+    "rv_d": 79.73,
+    "rv_w": 32.42,
+    "rv_m": 27.57,
+    "vi": 36.13
+  },
+  "path_forecast": [
+    {
+      "h": 1,
+      "ensemble": 35.34,
+      "har_vi": 36.22,
+      "garch": 34.46,
+      "pi80_lo": 8.04,
+      "pi80_hi": 56.43
+    },
+    {
+      "h": 2,
+      "ensemble": 34.77,
+      "har_vi": 35.18,
+      "garch": 34.35,
+      "pi80_lo": 7.45,
+      "pi80_hi": 55.4
+    },
+    {
+      "h": 3,
+      "ensemble": 36.27,
+      "har_vi": 38.3,
+      "garch": 34.24,
+      "pi80_lo": 16.33,
+      "pi80_hi": 52.3
+    },
+    {
+      "h": 5,
+      "ensemble": 35.37,
+      "har_vi": 36.7,
+      "garch": 34.04,
+      "pi80_lo": 19.24,
+      "pi80_hi": 48.23
+    }
+  ],
+  "consensus": {
+    "rel_gap": 0.075,
+    "verdict": "合意",
+    "verified": "乖離週は誤差 7.95pt vs 合意週 6.76pt (forecast_v2_report.md)"
+  },
+  "vrp": {
+    "signal": 54.0,
+    "stance_tau200": "flat(中立)",
+    "caveat": "CIがゼロを含む未証明の戦略部分"
+  },
+  "verification": "results/forecast_v2_report.md / vol_report.md / validation_report.md"
+}
