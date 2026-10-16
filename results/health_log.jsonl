@@ -1,0 +1,1 @@
+{"date": "2026-10-16", "window_weeks": 26, "verdict": "PASS", "r2_5d_harvi": 0.477, "r2_5d_garch": 0.507, "coverage80": 0.777, "gap_median": 0.169, "checks": {"r2_5d": {"value": 0.477, "status": "PASS"}, "r2_garch": {"value": 0.507, "status": "PASS"}, "coverage80": {"value": 0.777, "status": "PASS"}, "gap_median": {"value": 0.169, "status": "PASS"}}}
