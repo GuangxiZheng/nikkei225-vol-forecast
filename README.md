@@ -4,24 +4,30 @@
 それで儲かるか？**」を loto-analysis(予測不可能と実証) / boatrace-analysis(予測可能と実証)
 と同じ**時分割検証の型**で検証し、検証を通過した予測モデルを提供する。
 
-## モデル (v2)
+## モデル (v2.1 — 2026-10-16: Parkinsonレンジを追加)
 
 - **経路予測**: 次の1/2/3/5営業日の実現ボラ(年率%)を、ホライズン別の独立モデルで予測
 - **2ロジック合議**:
-  - ロジック1: HAR-RV + 日経VI (自作・5パラメータ線形モデル)
+  - ロジック1: HAR-RV + 日経VI + レンジ (自作・6パラメータ線形モデル)。
+    v2.1で Parkinsonレンジ(pk5) を追加 — 高値-安値の情報で OOS R² +0.342→+0.370
+    (検証: [`results/feature_ext_report.md`](results/feature_ext_report.md)・
+    ウォークフォワードで事前宣言した採用基準を通過)
   - ロジック2: GARCH(1,1) (確立OSS [`arch`](https://github.com/bashtage/arch))
   - 乖離率を合議指標とし、乖離>30%の週は精度低下フラグ(検証済み)
 - **80%予測区間**: コンフォーマル法(ウォークフォワード残差の分位点・分布フリー)
 - **アンサンブル**: 2ロジック平均 — 検証で全ホライズンで個別モデルに劣らず、
-  h=5で最高(OOS R² +0.367)
+  h=5で最高(OOS R² +0.376・v2.0の+0.367から改善)
+- v2.1の採用はユーザー決定による先行採用。月次のOOS確認
+  ([`feature_oos_check.py`](scripts/feature_oos_check.py)・仕様凍結済み) が
+  改善の持続を監視し、逆転時はロールバック判断をする
 
 ## 検証結果サマリ (n=392週・2018-01〜2026-10・未来参照ゼロ)
 
 | 検証 | 結論 |
 |------|------|
-| 予測可能性 | **あり**。HAR+VI の OOS R² = **+0.342** (市場のVI単体 +0.234) |
-| モデル vs 市場 | モデルが**有意に正確** (二乗誤差差95%CI [-24.5, -7.3]・全域負) |
-| アンサンブル vs 個別 | h=5で最高。いずれのホライズンでも劣らず |
+| 予測可能性 | **あり**。v2.1 HAR+VI+レンジ の OOS R² = **+0.370** (市場のVI単体 +0.234・v2.0仕様の市場比較) |
+| モデル vs 市場 | モデルが**有意に正確** (二乗誤差差95%CI [-24.5, -7.3]・全域負・v2.0仕様) |
+| アンサンブル vs 個別 | h=5で最高(+0.376)。いずれのホライズンでも劣らず |
 | 自作実装の妥当性 | statsmodelsと機械精度一致・未来参照ゼロを直接再計算で検証・**GARCH(定番OSS)に劣らない** |
 | VRP売買戦略 | **未証明**(後半CI [-102, 328]でゼロを含む)。テールリスク大 |
 | プラセボ検定 | VIの限界貢献(+0.052)は n=392 では有意未満 — 限界として明記 |
@@ -40,9 +46,19 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python scripts/validate_model.py       # 検証2: 自作モデル妥当性バッテリー
 .venv/bin/python scripts/verify_forecast_v2.py   # 検証3: 経路・区間・合議の検証
 .venv/bin/python scripts/predict_nk225.py --refresh   # 予測実行(最新データ)
+.venv/bin/python scripts/render_dashboard.py    # ダッシュボード生成(results/dashboard.html)
+.venv/bin/python scripts/model_health.py        # 月次: 健全性チェック(results/health_log.jsonl)
+.venv/bin/python scripts/feature_ext_test.py    # 特徴量拡張のウォークフォワード検証
+.venv/bin/python scripts/feature_oos_check.py   # 月次: 特徴量拡張のOOS確認(月初営業日のみ)
+.venv/bin/python scripts/forecast_vs_actual.py  # 日次: 予測vs実績の突合・外れの原因分類
+.venv/bin/python scripts/long_vol_analysis.py   # 買いシグナル(long-vol週)の履歴検証
+.venv/bin/python scripts/straddle_backtest.py   # 買いシグナル週の実ストラドル検証(コスト込み)
+.venv/bin/python scripts/fetch_external.py      # FREDからVIX/SP500/USDJPY取得(検証2用)
+.venv/bin/python scripts/feature_ext2_test.py   # 特徴量拡張検証2: 海外市場変数
+.venv/bin/python scripts/feature_ext3_test.py   # 特徴量拡張検証3: イベントダミー
 ```
 
-推奨運用: 週1回 `predict_nk225.py --refresh` (月次再推定が検証と整合)
+推奨運用: 週1回 `predict_nk225.py --refresh` (月次再推定が検証と整合)。
 
 ## データ
 
