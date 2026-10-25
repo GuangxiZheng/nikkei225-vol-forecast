@@ -1,0 +1,7 @@
+{"data_asof": "2026-10-15", "h": 1, "pred": 28.31, "actual": 9.94, "err": -18.37, "inside_pi80": true, "vi_t": 32.17, "har": 23.63, "garch": 32.99, "cause": "静穏化の過大評価", "jump_in_window": false}
+{"data_asof": "2026-10-15", "h": 2, "pred": 28.66, "actual": 7.62, "err": -21.04, "inside_pi80": true, "vi_t": 32.17, "har": 24.43, "garch": 32.89, "cause": "静穏化の過大評価", "jump_in_window": false}
+{"data_asof": "2026-10-15", "h": 3, "pred": 29.53, "actual": 17.47, "err": -12.06, "inside_pi80": true, "vi_t": 32.17, "har": 26.26, "garch": 32.8}
+{"data_asof": "2026-10-20", "h": 1, "pred": 24.7, "actual": 42.66, "err": 17.96, "inside_pi80": true, "vi_t": 30.85, "har": 20.99, "garch": 28.4, "cause": "市場全体が予想外のショック(真のサプライズ)", "jump_in_window": false}
+{"data_asof": "2026-10-15", "h": 5, "pred": 30.06, "actual": 20.65, "err": -9.41, "inside_pi80": true, "vi_t": 32.17, "har": 27.49, "garch": 32.62}
+{"data_asof": "2026-10-20", "h": 2, "pred": 25.27, "actual": 26.33, "err": 1.06, "inside_pi80": true, "vi_t": 30.85, "har": 22.17, "garch": 28.36}
+{"data_asof": "2026-10-21", "h": 1, "pred": 29.57, "actual": 5.43, "err": -24.14, "inside_pi80": true, "vi_t": 35.97, "har": 28.73, "garch": 30.41, "cause": "静穏化の過大評価", "jump_in_window": false}

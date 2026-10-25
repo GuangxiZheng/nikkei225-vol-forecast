@@ -1,0 +1,16 @@
+{
+  "frozen_at": "2026-10-16",
+  "data_cutoff": "2026-10-15",
+  "base_features": ["rv_d", "rv_w", "rv_m", "vi"],
+  "variants": {
+    "V2 +pk5": ["rv_d", "rv_w", "rv_m", "vi", "pk5"],
+    "V5 +pk5+dsr22+maxz5": ["rv_d", "rv_w", "rv_m", "vi", "pk5", "dsr22", "maxz5"]
+  },
+  "benchmark": "rv_w",
+  "validation": {
+    "source": "results/feature_ext_report.md",
+    "r2_full": {"base": 0.342, "V2 +pk5": 0.370, "V5 +pk5+dsr22+maxz5": 0.383},
+    "eval_fridays_n": 392
+  },
+  "criteria": "OOS累積n>=8でΔMSE(vs基準)>0が継続すれば採用確定、<0に逆転したら採用見直し。n<8は確認中として判断しない。仕様は凍結済み — 観測後にこのファイルの基準・特徴量を変更してはならない。"
+}
