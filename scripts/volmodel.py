@@ -15,7 +15,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
-COLS = ["rv_d", "rv_w", "rv_m", "vi"]
+COLS = ["rv_d", "rv_w", "rv_m", "vi", "pk5"]  # v2.1: Parkinsonレンジを追加 (feature_ext_report.md)
 ANNUAL = 252
 HORIZONS = (1, 2, 3, 5)
 

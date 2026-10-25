@@ -1,12 +1,13 @@
 #!/usr/bin/env python
-"""日経225ボラティリティ予測 v2 — 経路予測・予測区間・2ロジック合議。
+"""日経225ボラティリティ予測 v2.1 — 経路予測・予測区間・2ロジック合議。
 
-- 経路(線)予測: 次の1/2/3/5営業日の実現ボラ(年率%)を直接多ホライズンHAR+VIで
+- 経路(線)予測: 次の1/2/3/5営業日の実現ボラ(年率%)を直接多ホライズン
+  HAR+VI+レンジ(Parkinson)で (v2.1: pk5追加・feature_ext_report.md)
 - 80%予測区間: ウォークフォワード残差のコンフォーマル分位点
-  (実カバレッジは検証で 64〜73% と名目を下回るため「目安」として扱う)
-- 2ロジック: HAR+VI と GARCH(1,1)(arch) を独立に予測し乖離を報告。
- 乖離>30%の週は検証で精度が落ちる(6.76→7.95pt)ことが確認済み
-- アンサンブル: 2ロジック平均(h=5でOOS R² +0.367と全手法最高・検証済み)
+  (実カバレッジは検証で 65〜71% と名目を下回るため「目安」として扱う)
+- 2ロジック: HAR+VI+レンジ と GARCH(1,1)(arch) を独立に予測し乖離を報告。
+  乖離>30%の週は検証で精度が落ちる(6.77→7.73pt)ことが確認済み
+- アンサンブル: 2ロジック平均(h=5でOOS R² +0.376と全手法最高・検証済み)
 
 使い方:
   .venv/bin/python scripts/predict_nk225.py --refresh
@@ -75,7 +76,7 @@ def main():
         })
 
     out = {
-        "model": "v2: path(HAR+VI + GARCH ensemble) + conformal 80% PI + consensus",
+        "model": "v2.1: path(HAR+VI+レンジ + GARCH ensemble) + conformal 80% PI + consensus",
         "data_asof": str(last["date"].date()),
         "features": {c: round(float(last[c]), 2) for c in COLS},
         "path_forecast": rows,
@@ -103,8 +104,8 @@ def main():
           f"→ 乖離 {rel_gap:.1%} 【{consensus}】")
     print(f"║ VRP(h=5基準): シグナル {signal:+.0f} → スタンス {stance}")
     print("╠═════════════════════════════════════════════════════════╣")
-    print("║ 検証: h=5 OOS R² HAR +0.342/GARCH +0.249/アンサンブル +0.367")
-    print("║ 区間: 実カバレッジ 64〜73% (名目80%より狭い→目安として使用)")
+    print("║ 検証: h=5 OOS R² HAR +0.370/GARCH +0.249/アンサンブル +0.376")
+    print("║ 区間: 実カバレッジ 65〜71% (名目80%より狭い→目安として使用)")
     print("╚═════════════════════════════════════════════════════════╝")
     print(f"saved: {OUT}")
 

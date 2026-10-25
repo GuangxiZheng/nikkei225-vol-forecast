@@ -35,7 +35,7 @@ def load_data():
     sun = df["date"].dt.dayofweek == 6
     df.loc[sun, "date"] = df.loc[sun, "date"] - pd.Timedelta(days=2)
     assert not df["date"].duplicated().any(), "日付の重複(曜日補正に失敗)"
-    df = df[["date", "close"]].drop_duplicates("date").sort_values("date")
+    df = df[["date", "high", "low", "close"]].drop_duplicates("date").sort_values("date")
     df["ret"] = np.log(df["close"] / df["close"].shift(1))
     v = pd.DataFrame(vi, columns=["ms", "vi"]).copy()
     v["date"] = pd.to_datetime(v["ms"], unit="ms").dt.normalize()
@@ -49,6 +49,9 @@ def build_features(df):
     df["rv_d"] = r.abs() * np.sqrt(ANNUAL) * 100   # 日次RV = |リターン|(年率%)
     df["rv_w"] = r.rolling(5).std() * np.sqrt(ANNUAL) * 100
     df["rv_m"] = r.rolling(22).std() * np.sqrt(ANNUAL) * 100
+    # Parkinson (レンジ): 高値-安値の情報 (v2.1で追加・feature_ext_report.md)
+    df["pk5"] = (np.log(df["high"] / df["low"]) ** 2 / (4 * np.log(2))
+                 ).rolling(5).mean().pow(0.5) * np.sqrt(ANNUAL) * 100
     # 5営業日後までの実現ボラ(年率%) — 予測ターゲット
     fwd = pd.concat([r.shift(-i) for i in range(1, HORIZON + 1)], axis=1)
     df["rv_fwd"] = fwd.std(axis=1, ddof=1) * np.sqrt(ANNUAL) * 100
