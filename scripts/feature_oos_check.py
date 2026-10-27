@@ -37,11 +37,13 @@ MIN_N = 2
 CONFIRM_N = 8
 
 
-def is_first_business_day(today):
-    d = today.replace(day=1)
-    while d.weekday() >= 5:
-        d += timedelta(days=1)
-    return today == d
+def logged_months():
+    """feature_oos_log.jsonl に記録済みの実行月 (YYYY-MM) の一覧。"""
+    try:
+        return [json.loads(l).get("run_at", "")[:7]
+                for l in LOG.read_text().splitlines() if l.strip()]
+    except FileNotFoundError:
+        return []
 
 
 def main():
@@ -54,9 +56,16 @@ def main():
     if "--refresh" in args:
         import fetch_nk225
         fetch_nk225.main()
-    if not (is_first_business_day(date.today()) or "--force" in args):
-        print("SKIP: 月次OOS確認は月初営業日のみ (--force で手動実行可)")
-        return
+    # 実行ガード: 本番specなら「今月まだ実行していなければ」いつでも可
+    # (ホスト停止で月初を逃しても、その月に最初に動いた日が担当する)
+    if "--force" not in args:
+        if spec_path != SPEC:
+            print("SKIP: 月次OOS確認は月初営業日のみ (--force で手動実行可)")
+            return
+        cur = date.today().strftime("%Y-%m")
+        if cur in logged_months():
+            print("SKIP: 今月は実行済み")
+            return
 
     df = build_features(load_data())
     df["y5"] = target_h(df, 5)
