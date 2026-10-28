@@ -226,8 +226,8 @@ def practical_panel(model, wk):
         条件達成は <b>{n_pos}回 ({n_pos/len(gaps):.0%})</b>。</div>
       <div class="note" style="margin-top:8px">厳格シグナル (参照:
         <b>results/long_vol_report.md</b>): 予測²−VI² = <b>{strict:+.0f}</b>
-        (閾値 +200) → <b style="color:{sig_color}">{'買いシグナル点灯 — 8年に2回しか出ない条件が達成(要精査)' if sig_ok else '未点灯'}</b>。
-        歴史上の点灯は2024-08(円キャリー崩壊前)と2025-04(関税ショック前)の2回のみ。</div>
+        (閾値 +200) → <b style="color:{sig_color}">{'条件達成 — 過去の点灯は損失が多く要精査' if sig_ok else '未点灯'}</b>。
+        歴史上の点灯は2回のみ(2018-02・2020-02)で、コスト込みでは損失 — 現時点で買い根拠は未検証。</div>
     </div>
   </div>
   <h3 style="margin:14px 0 8px">買い筋条件の監視ライン: 予測実現ボラ(h=5) − 日経VI

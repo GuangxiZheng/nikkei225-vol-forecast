@@ -1,55 +1,55 @@
 {
   "model": "v2.1: path(HAR+VI+レンジ + GARCH ensemble) + conformal 80% PI + consensus",
-  "data_asof": "2026-10-22",
+  "data_asof": "2026-10-27",
   "features": {
-    "rv_d": 5.43,
-    "rv_w": 20.65,
-    "rv_m": 29.02,
-    "vi": 38.25,
-    "pk5": 19.91
+    "rv_d": 27.3,
+    "rv_w": 26.73,
+    "rv_m": 29.19,
+    "vi": 27.66,
+    "pk5": 19.79
   },
   "path_forecast": [
     {
       "h": 1,
-      "ensemble": 27.04,
-      "har_vi": 25.53,
-      "garch": 28.56,
-      "pi80_lo": -0.49,
-      "pi80_hi": 47.89
+      "ensemble": 24.32,
+      "har_vi": 21.6,
+      "garch": 27.04,
+      "pi80_lo": -0.43,
+      "pi80_hi": 46.64
     },
     {
       "h": 2,
-      "ensemble": 26.92,
-      "har_vi": 25.32,
-      "garch": 28.51,
-      "pi80_lo": 0.05,
-      "pi80_hi": 47.46
+      "ensemble": 24.31,
+      "har_vi": 21.6,
+      "garch": 27.01,
+      "pi80_lo": -0.65,
+      "pi80_hi": 44.93
     },
     {
       "h": 3,
-      "ensemble": 28.79,
-      "har_vi": 29.12,
-      "garch": 28.47,
-      "pi80_lo": 7.98,
-      "pi80_hi": 45.33
+      "ensemble": 25.38,
+      "har_vi": 23.78,
+      "garch": 26.98,
+      "pi80_lo": 5.29,
+      "pi80_hi": 41.93
     },
     {
       "h": 5,
-      "ensemble": 30.17,
-      "har_vi": 31.96,
-      "garch": 28.38,
-      "pi80_lo": 14.31,
-      "pi80_hi": 43.64
+      "ensemble": 25.62,
+      "har_vi": 24.32,
+      "garch": 26.92,
+      "pi80_lo": 11.12,
+      "pi80_hi": 39.43
     }
   ],
   "consensus": {
-    "rel_gap": 0.119,
+    "rel_gap": 0.102,
     "verdict": "合意",
     "verified": "乖離週は誤差 7.95pt vs 合意週 6.76pt (forecast_v2_report.md)"
   },
   "vrp": {
-    "signal": 553.0,
-    "stance_tau200": "short(VRP売り)",
+    "signal": 109.0,
+    "stance_tau200": "flat(中立)",
     "caveat": "CIがゼロを含む未証明の戦略部分"
   },
   "verification": "results/forecast_v2_report.md / vol_report.md / validation_report.md"
