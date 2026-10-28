@@ -65,14 +65,20 @@ def garch_path_full(rets_pct):
 
 
 def garch_walkforward(df, cache="garch_wf.json"):
-    """各金曜時点でGARCH(1,1)を再推定し 5日経路を返す(キャッシュ付き)。"""
+    """各金曜時点でGARCH(1,1)を再推定し 5日経路を返す(キャッシュ付き)。
+
+    キャッシュは日付キー式のため、ラベル補正などで日付がずれるとミスマップ
+    する。行数の不一致を検知したら自動で無効化する (2026-10の教訓)。
+    """
     cpath = DATA / cache
     rets = (df["ret"] * 100).values
     dates = df["date"].values
     idx_of = {pd.Timestamp(d): i for i, d in enumerate(dates)}
     cache_map = {}
     if cpath.exists():
-        cache_map = json.load(open(cpath))
+        raw = json.load(open(cpath))
+        if raw.get("n_rows") == len(df):
+            cache_map = raw.get("preds", {})
     out = {}
     fridays = df[(df["date"] >= "2018-01-01") & (df["date"].dt.dayofweek == 4)]
     from arch import arch_model
@@ -86,7 +92,8 @@ def garch_walkforward(df, cache="garch_wf.json"):
                          rescale=False).fit(disp="off", show_warning=False)
         hvar = res.forecast(horizon=5, reindex=False).variance.values[-1]
         out[key] = [float(np.sqrt(hvar[:h].mean() * ANNUAL)) for h in (1, 2, 3, 5)]
-    cpath.write_text(json.dumps(cache_map | out), encoding="utf-8")
+    cpath.write_text(json.dumps({"n_rows": len(df), "preds": cache_map | out}),
+                     encoding="utf-8")
     return out
 
 

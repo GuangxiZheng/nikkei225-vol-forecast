@@ -31,10 +31,11 @@ def load_data():
     vi = json.load(open(DATA / "nkvi_daily.json"))
     df = pd.DataFrame(fut, columns=["ms", "open", "high", "low", "close", "_"]).copy()
     df["date"] = pd.to_datetime(df["ms"], unit="ms").dt.normalize()
-    # このデータは金曜分の足が「日曜」ラベル(+2日)で保存されるため実日付へ復元
-    sun = df["date"].dt.dayofweek == 6
-    df.loc[sun, "date"] = df.loc[sun, "date"] - pd.Timedelta(days=2)
-    assert not df["date"].duplicated().any(), "日付の重複(曜日補正に失敗)"
+    # このソースは全バーのラベルが実セッションの前日になっている (実日付 = ラベル+1日)。
+    # Yahoo ^N225 の終値と複数週一致することで確認 (2026-10検証)。
+    # 旧来の「日曜ラベル=金曜分」補正は誤りにつき廃止。
+    df["date"] = df["date"] + pd.Timedelta(days=1)
+    assert not df["date"].duplicated().any(), "日付の重複(ラベル補正に失敗)"
     df = df[["date", "high", "low", "close"]].drop_duplicates("date").sort_values("date")
     df["ret"] = np.log(df["close"] / df["close"].shift(1))
     v = pd.DataFrame(vi, columns=["ms", "vi"]).copy()
